@@ -15,8 +15,10 @@ app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Rute untuk melakukan CRUD dari folder routes
 app.use(routes);
 
+// Menampilkan pesan error
 app.use((error, req, res, next) => {
 	const statusCode = error.statusCode || 500;
 	res.status(statusCode).json({
@@ -25,6 +27,7 @@ app.use((error, req, res, next) => {
 	});
 });
 
+// Menjalankan koneksi
 sequelize
 	.sync()
 	.then(() => {

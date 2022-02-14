@@ -3,6 +3,7 @@ const router = express.Router();
 const { Players, Biodata, History } = require("../models");
 const bcrypt = require("bcrypt");
 
+// Menampilkan Halaman Utama (READ)
 router.get("/", (req, res, next) => {
 	try {
 		const { status } = req.query;
@@ -12,6 +13,7 @@ router.get("/", (req, res, next) => {
 	}
 });
 
+// Menampilkan Halaman Login (READ)
 router.get("/login", (req, res, next) => {
 	try {
 		const { status } = req.query;
@@ -21,6 +23,7 @@ router.get("/login", (req, res, next) => {
 	}
 });
 
+// Melakukan Login (AUTENTIKASI)
 router.post("/login", async (req, res, next) => {
 	const { email, password } = req.body;
 
@@ -45,6 +48,7 @@ router.post("/login", async (req, res, next) => {
 	}
 });
 
+// Menampilkan Halaman Register (READ)
 router.get("/register", (req, res, next) => {
 	try {
 		res.render("register.ejs", { headTitle: "Register" });
@@ -53,6 +57,7 @@ router.get("/register", (req, res, next) => {
 	}
 });
 
+// Membuat Akun (CREATE)
 router.post("/register", async (req, res, next) => {
 	const { username, email, password, age, address, city, win, lose } = req.body;
 
@@ -84,6 +89,7 @@ router.post("/register", async (req, res, next) => {
 	}
 });
 
+// Menampilkan Halaman Profil (READ)
 router.get("/profile/:id", async (req, res, next) => {
 	try {
 		const playerSelected = await Players.findOne({
@@ -102,6 +108,7 @@ router.get("/profile/:id", async (req, res, next) => {
 	}
 });
 
+// Mengubah Informasi Akun (UPDATE)
 router.post("/profile/:id", async (req, res, next) => {
 	const { username, email, password, age, address, city, win, lose } = req.body;
 	try {
@@ -144,6 +151,7 @@ router.post("/profile/:id", async (req, res, next) => {
 	}
 });
 
+// Menghapus Akun (DELETE)
 router.post("/delete/:id", async (req, res, next) => {
 	try {
 		const playerToDelete = await Players.findByPk(req.params.id);
