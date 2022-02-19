@@ -2,6 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const sequelize = require("./utils/dbConnection");
+const cookieParser = require("cookie-parser");
 const routes = require("./routes/router");
 
 // Inisiasi App untuk bisa menjalankan middleware
@@ -14,6 +15,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 // Rute untuk melakukan CRUD dari folder routes
 app.use(routes);

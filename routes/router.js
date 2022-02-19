@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { Players, Biodata, History } = require("../models");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const isLoggedIn = require("../middleware/authMiddleware");
 
 // Menampilkan Halaman Utama (READ)
 router.get("/", (req, res, next) => {
@@ -23,7 +25,7 @@ router.get("/login", (req, res, next) => {
 	}
 });
 
-// Melakukan Login (AUTENTIKASI)
+// Melakukan Login (AUTENTIKASI MASUK)
 router.post("/login", async (req, res, next) => {
 	const { email, password } = req.body;
 
@@ -38,6 +40,18 @@ router.post("/login", async (req, res, next) => {
 			const match = await bcrypt.compare(password, playerCompatible.password);
 
 			if (match) {
+				const token = jwt.sign(
+					{
+						uuid: playerCompatible.uuid,
+						email: playerCompatible.email,
+					},
+					"kuNc1",
+					{
+						expiresIn: 60 * 60 * 24,
+					}
+				);
+
+				res.cookie("jwt", token, { maxAge: 1000 * 60 * 60 * 24 });
 				res.redirect(`/profile/${playerCompatible.uuid}`);
 			} else {
 				res.redirect("/login?status=wrongpassword");
@@ -58,7 +72,7 @@ router.get("/register", (req, res, next) => {
 });
 
 // Membuat Akun (CREATE)
-router.post("/register", async (req, res, next) => {
+router.post("/register", isLoggedIn, async (req, res, next) => {
 	const { username, email, password, age, address, city, win, lose } = req.body;
 
 	try {
@@ -90,7 +104,7 @@ router.post("/register", async (req, res, next) => {
 });
 
 // Menampilkan Halaman Profil (READ)
-router.get("/profile/:id", async (req, res, next) => {
+router.get("/profile/:id", isLoggedIn, async (req, res, next) => {
 	try {
 		const playerSelected = await Players.findOne({
 			where: {
@@ -109,7 +123,7 @@ router.get("/profile/:id", async (req, res, next) => {
 });
 
 // Mengubah Informasi Akun (UPDATE)
-router.post("/profile/:id", async (req, res, next) => {
+router.post("/profile/:id", isLoggedIn, async (req, res, next) => {
 	const { username, email, password, age, address, city, win, lose } = req.body;
 	try {
 		const playerToUpdate = await Players.findByPk(req.params.id);
@@ -152,7 +166,7 @@ router.post("/profile/:id", async (req, res, next) => {
 });
 
 // Menghapus Akun (DELETE)
-router.post("/delete/:id", async (req, res, next) => {
+router.post("/delete/:id", isLoggedIn, async (req, res, next) => {
 	try {
 		const playerToDelete = await Players.findByPk(req.params.id);
 
@@ -177,6 +191,16 @@ router.post("/delete/:id", async (req, res, next) => {
 
 			res.redirect("/?status=successfullydeleted");
 		}
+	} catch (error) {
+		next(error);
+	}
+});
+
+// Melakukan Logout (AUTENTIKASI KELUAR)
+router.post("/logout", (req, res, next) => {
+	try {
+		res.cookie("jwt", "", { maxAge: 1 });
+		res.redirect("/login");
 	} catch (error) {
 		next(error);
 	}

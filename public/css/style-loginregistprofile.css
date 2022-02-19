@@ -43,7 +43,7 @@ a {
 
 /* End Regist & Profile Container */
 
-/* Start Users Form */
+/* Start Players Form */
 
 .players-form input.form-control {
 	color: #632652;
@@ -93,8 +93,6 @@ a {
 	background-color: #ffeead;
 	border-radius: 3px;
 	padding: 1rem 2.2rem;
-	min-width: 50%;
-	width: 100%;
 	font-weight: bold;
 	color: #632652;
 	box-shadow: 0 0 0 0.1rem rgb(99, 38, 82, 25%) !important;
@@ -124,6 +122,7 @@ a {
 }
 
 /* Start Profile Page */
+
 .profile__delete-btn {
 	display: flex;
 	justify-content: center;
@@ -149,11 +148,11 @@ a {
 	padding: 0.2rem;
 }
 
-/* End Users Form */
+/* End Players Form */
 
 /* Start Footer */
 
-.login-regist-footer {
+.loginregistprofile-footer {
 	font-size: 0.75rem;
 	margin-top: 3.5em;
 	padding: 1em;
