@@ -141,7 +141,7 @@ router.post("/profile/:id", async (req, res, next) => {
 			const updated = await playerToUpdate.update({
 				username: username ?? playerToUpdate.username,
 				email: email ?? playerToUpdate.email,
-				password: password === "" ? playerToUpdate.password : password,
+				password: password === "" ? playerToUpdate.password : bcrypt.hashSync(password, 10),
 			});
 
 			res.redirect(`/profile/${updated.uuid}`);
