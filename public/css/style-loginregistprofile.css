@@ -148,6 +148,12 @@ a {
 	padding: 0.2rem;
 }
 
+/* Alert for Successfully Registered */
+.success-message small {
+	color: #005f28;
+	padding: 0.2rem;
+}
+
 /* End Players Form */
 
 /* Start Footer */

@@ -72,7 +72,7 @@ router.get("/register", (req, res, next) => {
 });
 
 // Membuat Akun (CREATE)
-router.post("/register", isLoggedIn, async (req, res, next) => {
+router.post("/register", async (req, res, next) => {
 	const { username, email, password, age, address, city, win, lose } = req.body;
 
 	try {
@@ -96,7 +96,7 @@ router.post("/register", isLoggedIn, async (req, res, next) => {
 		});
 
 		if (newPlayer) {
-			res.redirect(`/profile/${newPlayer.uuid}`);
+			res.redirect(`/login?status=successfullyregistered`);
 		}
 	} catch (error) {
 		next(error);
